@@ -1,13 +1,14 @@
 <div>
-    <h1>Welcome to the Golf Scorecard App!</h1>
-    <p>Please review the course details below:</p>
+  <h1>Welcome to the Golf Scorecard App!</h1>
+  <p>Please click on a course to create a new game:</p>
 </div>
 
-<div>
-    <mat-card>
-        <mat-list *ngFor="let course of courses">
-            <h3>{{course.name}}</h3>
-            <img style="width: 200px" src="{{course.image}}" alt="">
-        </mat-list>
-    </mat-card>
+<div class="main-container">
+  <mat-card>
+      <mat-list>
+        <mat-list-item *ngFor="let course of courses" (click)="goToCourse(course.id)">
+            {{ course.name }}
+        </mat-list-item>
+    </mat-list>
+  </mat-card>
 </div>
