@@ -1,0 +1,17 @@
+<div>
+    <table>
+        <thead>
+            <th>Name</th>
+            <th *ngFor="let hole of holes">{{hole | titlecase}}</th>
+            <th>Total Par</th>
+        </thead>
+    
+        <tbody>
+            <tr *ngFor="let player of players; let i = index">
+                <td>{{player.name}}</td>
+                <td *ngFor="let hole of holes">{{player[hole]}}</td>
+                <td class="total-cell">{{ getTotalPar(player) }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -24,7 +24,7 @@
       <table>
         <thead>
           <th>Name</th>
-          <th *ngFor="let hole of holes">{{ hole }}</th>
+          <th *ngFor="let hole of holes">{{ hole | titlecase}}</th>
           <th>Total Par</th>
           <th></th>
         </thead>

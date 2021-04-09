@@ -1,1 +1,15 @@
-<p>current-golf-game works!</p>
+<div class="main-container">
+    <mat-card>
+        <mat-tab-group mat-align-tabs="center">
+            <mat-tab label="Fox Hollow">
+                <app-view-games-table [courseId]="'18300'"></app-view-games-table>
+            </mat-tab>
+            <mat-tab label="Thanksgiving Point">
+                <app-view-games-table [courseId]="'11819'"></app-view-games-table>
+            </mat-tab>
+            <mat-tab label="Spanish Oaks">
+                <app-view-games-table [courseId]="'19002'"></app-view-games-table>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card>
+</div>

@@ -9,6 +9,7 @@ import { CreateGameComponent } from './components/create-game/create-game.compon
 import { CurrentGolfGameComponent } from './components/current-golf-game/current-golf-game.component';
 import { MaterialModule } from './modules/material.module';
 import { TopNavbarComponent } from './components/top-navbar/top-navbar.component';
+import { ViewGamesTableComponent } from './components/view-games-table/view-games-table.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { TopNavbarComponent } from './components/top-navbar/top-navbar.component
     WelcomeComponent,
     CreateGameComponent,
     CurrentGolfGameComponent,
-    TopNavbarComponent
+    TopNavbarComponent,
+    ViewGamesTableComponent
   ],
   imports: [
     BrowserModule,

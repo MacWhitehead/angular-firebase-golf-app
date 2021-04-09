@@ -70,7 +70,7 @@ export class CreateGameComponent implements OnInit {
         six: 0,
         seven: 0,
         eight: 0,
-        nine: 0,
+        // nine: 0,
         // ten: 0,
         // eleven: 0,
         // twelve: 0,
@@ -108,8 +108,8 @@ export class CreateGameComponent implements OnInit {
       player.five +
       player.six +
       player.seven +
-      player.eight +
-      player.nine
+      player.eight
+      // player.nine +
       // player.ten +
       // player.eleven +
       // player.twelve +

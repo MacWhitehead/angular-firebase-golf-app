@@ -10,7 +10,7 @@ export interface Player {
     six: number;
     seven: number;
     eight: number;
-    nine: number;
+    // nine: number;
     // ten: number;
     // eleven: number;
     // twelve: number;
