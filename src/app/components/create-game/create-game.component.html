@@ -1,5 +1,53 @@
 <div class="main-container">
-    <div class="cards">
-        <h2>{{course.name}}</h2>
-    </div>
+  <div class="cards">
+    <h2>{{ course.name }}</h2>
+    <mat-card>
+      <mat-form-field>
+        <input
+          matInput
+          [formControl]="playerName"
+          placeholder="Player Name"
+          type="text"
+        />
+        <mat-error *ngIf="playerName.hasError('duplicate')"
+          >Duplicate Name</mat-error
+        >
+      </mat-form-field>
+
+      <button mat-mini-fab color="primary" (click)="addPlayer()">
+        <mat-icon>add</mat-icon>
+      </button>
+
+      <div>{{ players | json }}</div>
+    </mat-card>
+    <mat-card class="scorecard">
+      <table>
+        <thead>
+          <th>Name</th>
+          <th *ngFor="let hole of holes">{{ hole }}</th>
+          <th>Total Par</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let player of players; let i = index">
+            <td>{{ player.name }}</td>
+            <td *ngFor="let hole of holes">
+              <input
+                type="number"
+                [id]="hole"
+                [(ngModel)]="player[hole]"
+                class="par-input"
+              />
+            </td>
+            <td class="total-cell">{{ getTotalPar(player) }}</td>
+            <td>
+              <button mat-icon-button (click)="deletePlayer(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-card>
+  </div>
 </div>
