@@ -10,6 +10,7 @@ import { CurrentGolfGameComponent } from './components/current-golf-game/current
 import { MaterialModule } from './modules/material.module';
 import { TopNavbarComponent } from './components/top-navbar/top-navbar.component';
 import { ViewGamesTableComponent } from './components/view-games-table/view-games-table.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ViewGamesTableComponent } from './components/view-games-table/view-game
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
