@@ -3,12 +3,12 @@ import {
   AbstractControl,
   FormControl,
   ValidatorFn,
-  FormsModule,
 } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Courses } from 'src/app/interfaces/courses';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Course, Courses } from 'src/app/interfaces/courses';
 import { Player } from 'src/app/interfaces/player';
 import { CoursesService } from 'src/app/services/courses.service';
+import { PlayersService } from 'src/app/services/players.service';
 
 @Component({
   selector: 'app-create-game',
@@ -17,10 +17,12 @@ import { CoursesService } from 'src/app/services/courses.service';
 })
 export class CreateGameComponent implements OnInit {
   courses: Courses[];
-  course: Courses;
+  course: any[];
+  currentCourse: Course[];
   playerName = new FormControl('', this.nameValidator());
   players: Player[] = [];
   playerId = 0;
+  courseId = +this.route.snapshot.paramMap.get('id');
   holes: string[] = [
     'one',
     'two',
@@ -44,14 +46,31 @@ export class CreateGameComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private coursesService: CoursesService
+    private coursesService: CoursesService, 
+    private playerService: PlayersService, 
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.courses = this.coursesService.courses;
-    this.course = this.courses.find(
+    console.log(this.courseId);
+    this.course = this.coursesService.course
+    let findCourse = this.courses.filter(
       (course) => course.id === this.route.snapshot.params['id']
-    );
+      );
+    this.course.push(findCourse)
+
+      this.playerService.getGamesByCourse(this.courseId.toString()).subscribe(players => {
+        this.players = players;
+    });
+    this.courseData(this.courseId);
+  }
+
+  courseData(courseId) {
+    this.coursesService.getCourseData(courseId.toString()).subscribe(response => {
+      this.course = response.course;
+      console.log(this.course)
+    })
   }
 
   addPlayer(): void {
@@ -59,8 +78,7 @@ export class CreateGameComponent implements OnInit {
       this.playerId++;
 
       this.players.push({
-        id: this.playerId.toString(),
-        courseId: this.course.id,
+        courseId: this.course[0].id,
         name: this.playerName.value,
         one: 0,
         two: 0,
@@ -124,5 +142,11 @@ export class CreateGameComponent implements OnInit {
 
   deletePlayer(index: number): void {
     this.players.splice(index, 1);
+  }
+  submit(): void {
+    this.players.forEach(player => {
+      this.playerService.saveGameToScoreboard(player);
+    });
+    this.router.navigate(['./welcome']);
   }
 }

@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Courses } from 'src/app/interfaces/courses';
 import { Player } from 'src/app/interfaces/player';
 import { CoursesService } from 'src/app/services/courses.service'
+import { PlayersService } from 'src/app/services/players.service';
 
 @Component({
   selector: 'app-view-games-table',
@@ -65,12 +67,12 @@ export class ViewGamesTableComponent implements OnInit {
     },
   ];
 
-  constructor( private coursesService: CoursesService) {}
+  constructor( private playerService: PlayersService) {}
 
   ngOnInit(): void {
-    this.players = this.playerData.filter(
-      (players) => players.courseId === this.courseId
-    );
+    this.playerService.getGamesByCourse(this.courseId).subscribe((players: Player[]) => {
+      this.players = players;
+  });
   }
 
   getTotalPar(player: Player): number {

@@ -10,7 +10,10 @@ import { CurrentGolfGameComponent } from './components/current-golf-game/current
 import { MaterialModule } from './modules/material.module';
 import { TopNavbarComponent } from './components/top-navbar/top-navbar.component';
 import { ViewGamesTableComponent } from './components/view-games-table/view-games-table.component';
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from '../environments/environment';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -19,16 +22,18 @@ import {HttpClientModule} from '@angular/common/http';
     CreateGameComponent,
     CurrentGolfGameComponent,
     TopNavbarComponent,
-    ViewGamesTableComponent
+    ViewGamesTableComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,6 +1,6 @@
 <div class="main-container">
   <div class="cards">
-    <h2>{{ course.name }}</h2>
+    <h2>{{ course[0].name }}</h2>
     <mat-card>
       <mat-form-field>
         <input
@@ -13,6 +13,22 @@
           >Duplicate Name</mat-error
         >
       </mat-form-field>
+
+      <div id="dropdowns" class="form-group d-flex flex-column justify-content-center">
+        <select name="teeType" id="teeTypeDropDown" class="checkValid form-control">
+            <option value="0"> Select the tee type:</option>
+            <option value="champ" id='champion'>Champion Tee</option>
+            <option value="pro" id='professional'>Professional Tee</option>
+            <option value="men" id='men'>Men's Tee</option>
+            <option value="women" id='women'>Women's Tee</option>
+        </select>
+        <select name="holes" id="holesDropdown" class="checkValid form-control">
+            <option value="0"> Select holes to play</option>
+            <option value="front9" id='front9'>Front 9</option>
+            <option value="back9" id='back9'>Back 9</option>
+            <option value="full18" id='full18'>Full 18</option>
+        </select>
+    </div>
 
       <button mat-mini-fab color="primary" (click)="addPlayer()">
         <mat-icon>add</mat-icon>
@@ -48,6 +64,7 @@
           </tr>
         </tbody>
       </table>
+      <button mat-raised-button color="primary" class="submit" (click)="submit()">Submit to Scoreboard</button>
     </mat-card>
   </div>
 </div>
