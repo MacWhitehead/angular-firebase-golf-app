@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
-  ValidatorFn,
+  ValidatorFn
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Course, Courses } from 'src/app/interfaces/courses';
+import { Course, Courses, Hole, TeeBox, TeeType } from 'src/app/interfaces/courses';
 import { Player } from 'src/app/interfaces/player';
 import { CoursesService } from 'src/app/services/courses.service';
 import { PlayersService } from 'src/app/services/players.service';
@@ -18,6 +18,9 @@ import { PlayersService } from 'src/app/services/players.service';
 export class CreateGameComponent implements OnInit {
   courses: Courses[];
   course: any[];
+  hole: Hole[] = [];
+  teeBox: TeeBox[] = [];
+  teeType: TeeType[] = [];
   currentCourse: Course[];
   playerName = new FormControl('', this.nameValidator());
   players: Player[] = [];
@@ -68,8 +71,16 @@ export class CreateGameComponent implements OnInit {
 
   courseData(courseId) {
     this.coursesService.getCourseData(courseId.toString()).subscribe(response => {
-      this.course = response.course;
+      this.course = response.data;
+      for(let i = 0; i < this.course['holes'].length; i++) {
+        this.teeBox.push(response.data.holes[i].teeBoxes);
+        this.hole.push(response.data.holes[i]);
+      }
       console.log(this.course)
+      console.log(this.hole)
+      console.log(this.teeBox)
+      // console.log(response.data.holes[0].teeBoxes[0].teeType)
+      
     })
   }
 

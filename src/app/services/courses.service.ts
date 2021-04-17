@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Courses, Course } from '../interfaces/courses';
 import { HttpClient } from '@angular/common/http';
-import { Key } from 'selenium-webdriver';
 
 
 @Injectable({
