@@ -23,9 +23,17 @@ export class CreateGameComponent implements OnInit {
   teeType: TeeType[] = [];
   currentCourse: Course[];
   playerName = new FormControl('', this.nameValidator());
+  // playerNumber = new FormControl('', this.playerTotalValidator());
   players: Player[] = [];
   playerId = 0;
   courseId = +this.route.snapshot.paramMap.get('id');
+  selectedTee = '';
+  selectedHoles = '';
+  numberOfHoles: string[] = [
+    'Front 9',
+    'Back 9',
+    'Full 18'
+  ]
   holes: string[] = [
     'one',
     'two',
@@ -84,12 +92,25 @@ export class CreateGameComponent implements OnInit {
     })
   }
 
+  getTeeType(event: any) {
+    this.teeType = event.value.teeType;
+  }
+
+  getHolesToPlay(event:any) {
+    this.selectedHoles = event.value;
+    console.log(event.value)
+    console.log(this.selectedHoles)
+  }
+
   addPlayer(): void {
-    if (this.playerName.value) {
+    if (this.playerName.value && this.players.length < 5) {
       this.playerId++;
+      console.log(this.selectedHoles)
+      console.log(this.selectedTee)
+      console.log(this.course)
 
       this.players.push({
-        courseId: this.course[0].id,
+        courseId: this.course['id'],
         name: this.playerName.value,
         one: 0,
         two: 0,
@@ -99,7 +120,7 @@ export class CreateGameComponent implements OnInit {
         six: 0,
         seven: 0,
         eight: 0,
-        // nine: 0,
+        // nine: 0
         // ten: 0,
         // eleven: 0,
         // twelve: 0,
@@ -111,6 +132,8 @@ export class CreateGameComponent implements OnInit {
         // eighteen: 0,
       });
       this.playerName.setValue('');
+    // } else {
+    //   this.playerTotalValidator();
     }
   }
 
@@ -127,6 +150,14 @@ export class CreateGameComponent implements OnInit {
       return error;
     };
   }
+
+  // playerTotalValidator(): ValidatorFn {
+  //   let error = null;
+  //   if(this.players.length >= 4) {
+  //     error = {maxPlayers: true};
+  //   }
+  //   return error;
+  // }
 
   getTotalPar(player: Player): number {
     return (

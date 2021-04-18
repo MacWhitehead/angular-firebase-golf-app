@@ -25,47 +25,6 @@ export class ViewGamesTableComponent implements OnInit {
   ];
 
   players: Player[] = [];
-  playerData: Player[] = [
-    {
-      id: '1',
-      courseId: '18300',
-      name: 'Jane',
-      one: 4,
-      two: 2,
-      three: 3,
-      four: 5,
-      five: 1,
-      six: 2,
-      seven: 3,
-      eight: 6,
-    },
-    {
-      id: '2',
-      courseId: '11819',
-      name: 'Jake',
-      one: 4,
-      two: 2,
-      three: 3,
-      four: 2,
-      five: 1,
-      six: 2,
-      seven: 3,
-      eight: 6,
-    },
-    {
-      id: '3',
-      courseId: '19002',
-      name: 'Jessica',
-      one: 4,
-      two: 2,
-      three: 3,
-      four: 2,
-      five: 1,
-      six: 2,
-      seven: 3,
-      eight: 6,
-    },
-  ];
 
   constructor( private playerService: PlayersService) {}
 
