@@ -35,15 +35,10 @@ export class ViewGamesTableComponent implements OnInit {
   }
 
   getTotalPar(player: Player): number {
-    return (
-      player.one +
-      player.two +
-      player.three +
-      player.four +
-      player.five +
-      player.six +
-      player.seven +
-      player.eight
-    );
+    let result = 0;
+    for(const key in player.holes) {
+      result += player.holes[key]
+    }
+    return result;
   }
 }

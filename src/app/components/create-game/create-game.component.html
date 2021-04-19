@@ -1,7 +1,7 @@
 <div class="main-container">
   <div class="cards">
     <h2>{{ course["name"] }}</h2>
-    <mat-card>
+    <mat-card *ngIf="players.length < 4">
       <mat-form-field class="form">
         <input
           matInput
@@ -17,54 +17,78 @@
       <mat-form-field class="form">
         <mat-label>Select tee type</mat-label>
         <mat-select (selectionChange)="getTeeType($event)">
-          <mat-option
-            *ngFor="let tee of teeBox[0]"
-            [value]="tee"
-            >{{ tee.teeType }}</mat-option
-          >
+          <mat-option *ngFor="let tee of teeBox[0]" [value]="tee">{{
+            tee.teeType
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field class="form">
         <mat-label>Select holes to play</mat-label>
         <mat-select (selectionChange)="getHolesToPlay($event)">
-          <mat-option
-            *ngFor="let holes of numberOfHoles"
-            [value]="holes"
-            >{{ holes }}</mat-option
-          >
+          <mat-option *ngFor="let holes of numberOfHoles" [value]="holes">{{
+            holes
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <button mat-mini-fab color="primary" (click)="addPlayer()">
         <mat-icon>add</mat-icon>
       </button>
-      <!-- <mat-error *ngIf="playerNumber.hasError('maxPlayers')"
-      >Name entry empty or max number of players reached.</mat-error
-    > -->
 
       <div>{{ players | json }}</div>
     </mat-card>
+    <mat-card *ngIf="players.length >= 4">Max players reached</mat-card>
     <mat-card class="scorecard">
       <table>
         <thead>
           <th>Name</th>
-          <th *ngFor="let hole of holes">{{ hole | titlecase }}</th>
-          <th>Total Par</th>
+          <th *ngFor="let hole of cloneHoles">{{ hole }}</th>
+          <th>Total</th>
           <th></th>
         </thead>
         <tbody>
-          <tr *ngFor="let player of players; let i = index">
+          <tr>
+            <td>Par</td>
+            <ng-container *ngIf="holesObservable | async as holes">
+              <td *ngFor="let hole of holes">
+                {{ getTeeBoxInfo(hole.teeBoxes, 'par') }}
+              </td>
+            </ng-container>
+            <td>{{totals.par}}</td>
+          </tr>
+          <tr>
+            <td>Handicap</td>
+            <ng-container *ngIf="holesObservable | async as holes">
+              <td *ngFor="let hole of holes">
+                {{ getTeeBoxInfo(hole.teeBoxes, 'hcp') }}
+              </td>
+            </ng-container>
+            <td>{{totals.hcp}}</td>
+          </tr>
+          <tr>
+            <td>Yardage</td>
+            <ng-container *ngIf="holesObservable | async as holes">
+              <td *ngFor="let hole of holes">
+                {{ getTeeBoxInfo(hole.teeBoxes, 'yards') }}
+              </td>
+            </ng-container>
+            <td>{{totals.yards}}</td>
+          </tr>
+          <tr *ngFor="let player of players">
             <td>{{ player.name }}</td>
-            <td *ngFor="let hole of holes">
-              <input
-                type="number"
-                [id]="hole"
-                [(ngModel)]="player[hole]"
-                class="par-input"
-              />
-            </td>
-            <td class="total-cell">{{ getTotalPar(player) }}</td>
+            <ng-container *ngIf="holesObservable | async as holes">
+              <td *ngFor="let hole of holes; index as i">
+                <input
+                  type="number"
+                  [id]="i"
+                  [(ngModel)]="player.holes[i + 1]"
+                  class="par-input"
+                  (change)="getTotalPar(player)"
+                />
+              </td>
+            </ng-container>
+            <td class="total-cell">{{totalPlayersPar[player.name]}}</td>
             <td>
               <button mat-icon-button (click)="deletePlayer(i)">
                 <mat-icon>delete</mat-icon>
