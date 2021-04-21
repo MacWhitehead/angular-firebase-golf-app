@@ -1,6 +1,13 @@
 mat-card {
     width: 50%;
     margin: auto;
+    padding: 0px;
+    background-color: #B2E4DB;
+}
+
+mat-list-item {
+    text-decoration: underline;
+    border-bottom: black 1px solid;
 }
 
 mat-list-item:hover {
@@ -8,7 +15,7 @@ mat-list-item:hover {
     border-radius: 5px;
     cursor: pointer;
 }
-h2 {
+h1, p, mat-list-item {
     text-align: center;
 }
 

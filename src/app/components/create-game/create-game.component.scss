@@ -1,9 +1,13 @@
-h2 {
+h2, p {
     text-align: center;
 }
 
 .cards {
     margin: auto;
+}
+
+.background {
+    background-color: #B2E4DB;
 }
 
 .main-container {
@@ -14,10 +18,6 @@ h2 {
 
 mat-form-field {
     width: calc(100% - 40px);
-}
-
-.hours {
-    margin-top: 30px;
 }
 
 .total-cell {
@@ -33,8 +33,8 @@ mat-form-field {
 }
 
 .par-input {
-    max-width: 75px;
-    margin-left: 15px;
+    max-width: 40px;
+    margin-left: 5px;
     text-align: center;
 }
 
@@ -48,19 +48,20 @@ table {
 
 th {
     border-bottom: 1px solid black;
-
-    &:not(:first-child) {
-        padding-left: 15px;
-    }
+    padding: 2.5px;
 }
 
 td {
     text-align: center;
-    padding: 10px 0px;
+    padding: 2.5px;
 }
 
 tr td {
     border-bottom:1pt solid #C1C1C1;
+}
+
+th, tr:nth-child(even) {
+    background: #9cc5a1;
 }
 
 .submit {

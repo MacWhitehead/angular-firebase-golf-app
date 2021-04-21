@@ -4,6 +4,7 @@ import {
   FormControl,
   ValidatorFn
 } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -26,6 +27,8 @@ export class CreateGameComponent implements OnInit {
   teeType: TeeType[] = [];
   currentCourse: Course[];
   maxPlayersReached = false;
+  isHidden = false;
+  playersFinished: any[];
   totals = {
     yards: 0,
     hcp: 0,
@@ -47,24 +50,24 @@ export class CreateGameComponent implements OnInit {
   cloneHoles: string[];
   holesApiData: any[];
   holes: string[] = [
-    'one',
-    'two',
-    'three',
-    'four',
-    'five',
-    'six',
-    'seven',
-    'eight',
-    'nine',
-    'ten',
-    'eleven',
-    'twelve',
-    'thirteen',
-    'fourteen',
-    'fifteen',
-    'sixteen',
-    'seventeen',
-    'eighteen',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    '11',
+    '12',
+    '13',
+    '14',
+    '15',
+    '16',
+    '17',
+    '18',
   ];
 
   constructor(
@@ -72,14 +75,13 @@ export class CreateGameComponent implements OnInit {
     private coursesService: CoursesService, 
     private playerService: PlayersService, 
     private router: Router,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.courses = this.coursesService.courses;
-    console.log(this.courseId);
     this.course = this.coursesService.course
-    
 
     let findCourse = this.courses.filter(
       (course) => course.id === this.route.snapshot.params['id']
@@ -100,25 +102,46 @@ export class CreateGameComponent implements OnInit {
         this.hole.push(response.data.holes[i]);
       }
       console.log(this.course)
-      console.log(this.hole)
-      console.log(this.teeBox)
     })
   }
 
   getTeeType(event: any) {
     this.teeType = event.value['teeType']
     this.getTotals(this.holesApiData)
-    console.log(this.teeType)
   }
 
   getHolesToPlay(event:any) {
     this.selectedHoles = event.value;
     this.getTotals(this.holesApiData)
-    console.log(this.selectedHoles)
+  }
+
+  dropdownSelected() {
+    if(this.teeType.length > 0 && this.selectedHoles.length > 0) {
+      this.isHidden = true;
+    }
+  }
+
+  update() {
+    this.holesObservable = this.coursesService.getCourseData(this.course['id']).pipe(
+      map((course) => {
+        this.cloneHoles = [...this.holes]
+        if(this.selectedHoles == "Front 9") {
+          course.data.holes.splice(9, 9)
+          this.cloneHoles.splice(9, 9)
+        } else if(this.selectedHoles == "Back 9") {
+          course.data.holes.splice(0, 9)
+          this.cloneHoles.splice(0, 9)
+        }
+        return course.data.holes;
+      }), 
+      tap((holes) => {
+        this.holesApiData = holes;
+      }),
+      tap((this.getTotals.bind(this)))
+    )
   }
 
   addPlayer(): void {
-    console.log(this.maxPlayersReached, this.players.length)
     if(this.players.length > 3) {
       this.maxPlayersReached = true;
       return;
@@ -151,23 +174,6 @@ export class CreateGameComponent implements OnInit {
         }
       });
       this.playerName.setValue('');
-      this.holesObservable = this.coursesService.getCourseData(this.course['id']).pipe(
-        map((course) => {
-          this.cloneHoles = [...this.holes]
-          if(this.selectedHoles == "Front 9") {
-            course.data.holes.splice(9, 9)
-            this.cloneHoles.splice(9, 9)
-          } else if(this.selectedHoles == "Back 9") {
-            course.data.holes.splice(0, 9)
-            this.cloneHoles.splice(0, 9)
-          }
-          return course.data.holes;
-        }), 
-        tap((holes) => {
-          this.holesApiData = holes;
-        }),
-        tap((this.getTotals.bind(this)))
-      )
     }
   }
 
@@ -197,7 +203,6 @@ export class CreateGameComponent implements OnInit {
           result += player.holes[key]
         }
       }
-      console.log(result)
       this.cd.detectChanges();
       this.totalPlayersPar[player.name] = result;
   }
@@ -223,7 +228,6 @@ export class CreateGameComponent implements OnInit {
   }
 
   getTotals(holes) {
-    console.log('Called!')
     if(holes) {
       holes.forEach(hole => {
         hole.teeBoxes.forEach(teeBoxInfo => {
@@ -235,5 +239,19 @@ export class CreateGameComponent implements OnInit {
         });
       });
     } 
+  }
+
+  endGame() {
+    this.players.forEach((player) => {
+      console.log(this.totalPlayersPar, this.selectedHoles.length)
+      console.log(player)
+      if(this.totalPlayersPar > this.selectedHoles.length) {
+        this.playersFinished.push(player["name"])
+        console.log(`Pushed player: ${this.playersFinished}`)
+      }
+    })
+    // if(this.playersFinished.length > 0) {
+    //   this.snackBar.open()
+    // }
   }
 }
