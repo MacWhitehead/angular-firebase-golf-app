@@ -101,7 +101,6 @@ export class CreateGameComponent implements OnInit {
         this.teeBox.push(response.data.holes[i].teeBoxes);
         this.hole.push(response.data.holes[i]);
       }
-      console.log(this.course)
     })
   }
 
@@ -141,6 +140,18 @@ export class CreateGameComponent implements OnInit {
     )
   }
 
+  addPlayerHoles(): any {
+    let result = {};
+    this.cloneHoles.forEach((hole) => {
+      if(parseInt(hole) == 10) {
+        result[hole + 9] = 0;
+      } else {
+        result[hole] = 0;
+      }
+    })
+    return result;
+  }
+
   addPlayer(): void {
     if(this.players.length > 3) {
       this.maxPlayersReached = true;
@@ -152,26 +163,7 @@ export class CreateGameComponent implements OnInit {
       this.players.push({
         courseId: this.course['id'],
         name: this.playerName.value,
-        holes: {
-          1: 0, 
-          2: 0,
-          3: 0,
-          4: 0,
-          5: 0,
-          6: 0,
-          7: 0,
-          8: 0,
-          9: 0,
-          10: 0,
-          11: 0,
-          12: 0,
-          13: 0,
-          14: 0,
-          15: 0,
-          16: 0,
-          17: 0,
-          18: 0,
-        }
+        holes: this.addPlayerHoles()
       });
       this.playerName.setValue('');
     }
@@ -205,6 +197,7 @@ export class CreateGameComponent implements OnInit {
       }
       this.cd.detectChanges();
       this.totalPlayersPar[player.name] = result;
+      this.endGame(player)
   }
 
   deletePlayer(index: number): void {
@@ -228,6 +221,9 @@ export class CreateGameComponent implements OnInit {
   }
 
   getTotals(holes) {
+    this.totals.par = 0;
+    this.totals.hcp = 0;
+    this.totals.yards = 0;
     if(holes) {
       holes.forEach(hole => {
         hole.teeBoxes.forEach(teeBoxInfo => {
@@ -241,17 +237,26 @@ export class CreateGameComponent implements OnInit {
     } 
   }
 
-  endGame() {
-    this.players.forEach((player) => {
-      console.log(this.totalPlayersPar, this.selectedHoles.length)
-      console.log(player)
-      if(this.totalPlayersPar > this.selectedHoles.length) {
-        this.playersFinished.push(player["name"])
-        console.log(`Pushed player: ${this.playersFinished}`)
-      }
-    })
-    // if(this.playersFinished.length > 0) {
-    //   this.snackBar.open()
-    // }
+  endGame(player) {
+    let playerFinishedHoles = true;
+    for(let name in this.totalPlayersPar) {
+        for(let hole in player.holes) {
+          if(player.holes[hole].toString() == 0) {
+            playerFinishedHoles = false;
+          }
+        }
+    }
+    if(playerFinishedHoles) {
+      let totalScore = this.totalPlayersPar[player.name] - this.totals.par;
+      if(totalScore == 0) {
+        this.snackBar.open(`${player.name} your score was ${this.totalPlayersPar[player.name]}! You hit par!`, "Close")
+      } 
+      else if(totalScore > 0) {
+        this.snackBar.open(`${player.name} your score was ${this.totalPlayersPar[player.name]}. Better luck next time!`, "Close")
+      } 
+      else {
+        this.snackBar.open(`Wow, ${player.name} your score was ${this.totalPlayersPar[player.name]}. You did great!`, "Close")
+      } 
+    }
   }
 }
